@@ -1,11 +1,29 @@
 @import "tw-animate-css";
 @import "tailwindcss";
 
-@custom-variant dark (&:is(.dark *));
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.font-cairo {
+  font-family: var(--font-cairo), Arial, sans-serif !important;
+}
+
+.font-amiri {
+  font-family: var(--font-amiri), Arial, sans-serif !important;
+}
+
+.font-tajawal {
+  font-family: var(--font-tajawal), Arial, sans-serif !important;
+}
+
+.font-almarai {
+  font-family: var(--font-almarai), Arial, sans-serif !important;
+}
+
+.font-rubik {
+  font-family: var(--font-rubik), Arial, sans-serif !important;
+}
 
 @layer base {
   :root {
