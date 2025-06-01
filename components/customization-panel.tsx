@@ -1,5 +1,7 @@
 "use client"
 import { Card, CardContent } from "@/components/ui/card"
+import type React from "react"
+
 import { Button } from "@/components/ui/button"
 import { Settings, Palette, Type, Layout, X, Wifi } from "lucide-react"
 import { useCustomizationStore } from "@/stores/customization-store"
@@ -25,13 +27,63 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
     { id: "bold", name: "جريء", description: "تصميم جريء وملفت" },
   ]
 
-  const backgrounds = [
+  const backgroundColors = [
     { id: "gradient-gold", name: "ذهبي متدرج", class: "bg-gradient-to-br from-yellow-50 to-amber-50" },
     { id: "gradient-blue", name: "أزرق متدرج", class: "bg-gradient-to-br from-blue-50 to-indigo-50" },
     { id: "gradient-green", name: "أخضر متدرج", class: "bg-gradient-to-br from-green-50 to-emerald-50" },
+    { id: "gradient-purple", name: "بنفسجي متدرج", class: "bg-gradient-to-br from-purple-50 to-violet-50" },
+    { id: "gradient-rose", name: "وردي متدرج", class: "bg-gradient-to-br from-rose-50 to-pink-50" },
     { id: "solid-white", name: "أبيض", class: "bg-white" },
     { id: "solid-dark", name: "داكن", class: "bg-gray-900 text-white" },
-    { id: "pattern-geometric", name: "نمط هندسي", class: "bg-gray-50" },
+  ]
+
+  const backgroundPatterns = [
+    { id: "none", name: "بدون نمط", preview: "bg-gray-100" },
+    {
+      id: "dots",
+      name: "نقاط",
+      preview: "bg-gray-100 bg-[radial-gradient(circle,_rgba(0,0,0,0.2)_1px,_transparent_1px)] bg-[length:10px_10px]",
+    },
+    {
+      id: "lines",
+      name: "خطوط",
+      preview:
+        "bg-gray-100 bg-[linear-gradient(to_right,rgba(0,0,0,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.1)_1px,transparent_1px)] bg-[size:10px_10px]",
+    },
+    {
+      id: "geometric",
+      name: "هندسي",
+      preview:
+        "bg-gray-100 bg-[conic-gradient(from_0deg_at_50%_50%,rgba(0,0,0,0.1)_0deg,rgba(255,255,255,1)_60deg,rgba(0,0,0,0.1)_120deg,rgba(255,255,255,1)_180deg,rgba(0,0,0,0.1)_240deg,rgba(255,255,255,1)_300deg,rgba(0,0,0,0.1)_360deg)] bg-[size:10px_10px]",
+    },
+    {
+      id: "waves",
+      name: "أمواج",
+      preview:
+        "bg-gray-100 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgNWMxLjI1LTIuNSAzLjc1LTIuNSA1IDBzMy43NSAyLjUgNSAwIiBzdHJva2U9InJnYmEoMCwwLDAsMC4yKSIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==')]",
+    },
+    {
+      id: "diagonal",
+      name: "قطري",
+      preview:
+        "bg-gray-100 bg-[repeating-linear-gradient(45deg,transparent,transparent_5px,rgba(0,0,0,0.1)_5px,rgba(0,0,0,0.1)_10px)]",
+    },
+    {
+      id: "grid",
+      name: "شبكة",
+      preview:
+        "bg-gray-100 bg-[linear-gradient(rgba(0,0,0,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.1)_1px,transparent_1px)] bg-[size:10px_10px]",
+    },
+    { id: "hexagon", name: "سداسي", preview: "bg-gray-100" },
+    { id: "triangles", name: "مثلثات", preview: "bg-gray-100" },
+    {
+      id: "circles",
+      name: "دوائر",
+      preview:
+        "bg-gray-100 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.1)_1px,transparent_1px)] bg-[length:12px_12px]",
+    },
+    { id: "zigzag", name: "متعرج", preview: "bg-gray-100" },
+    { id: "cross", name: "صليب", preview: "bg-gray-100" },
   ]
 
   const fonts = [
@@ -42,18 +94,16 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
     { id: "rubik", name: "Rubik", class: "font-rubik", preview: "نموذج خط روبيك" },
   ]
 
-  const accentColors = [
-    { id: "gold", name: "ذهبي", class: "bg-yellow-500" },
-    { id: "blue", name: "أزرق", class: "bg-blue-500" },
-    { id: "green", name: "أخضر", class: "bg-green-500" },
-    { id: "purple", name: "بنفسجي", class: "bg-purple-500" },
-    { id: "red", name: "أحمر", class: "bg-red-500" },
-    { id: "teal", name: "تركوازي", class: "bg-teal-500" },
-  ]
+  const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updateSettings({
+      backgroundColor: "solid-custom",
+      customBackgroundColor: e.target.value,
+    })
+  }
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden">
         <div className="flex items-center justify-between p-4 border-b">
           <div className="flex items-center gap-3">
             <Settings className="h-6 w-6 text-yellow-600" />
@@ -76,33 +126,30 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
         {/* Tabs */}
         <div className="flex border-b">
           <button
-            className={`px-4 py-3 font-medium text-sm flex items-center gap-2 transition-all ${
-              activeTab === "style"
-                ? "border-b-2 border-yellow-500 text-yellow-700 bg-yellow-50"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
+            className={`px-4 py-3 font-medium text-sm flex items-center gap-2 transition-all ${activeTab === "style"
+              ? "border-b-2 border-yellow-500 text-yellow-700 bg-yellow-50"
+              : "text-gray-500 hover:text-gray-700"
+              }`}
             onClick={() => setActiveTab("style")}
           >
             <Layout className="h-4 w-4" />
             نمط البطاقات
           </button>
           <button
-            className={`px-4 py-3 font-medium text-sm flex items-center gap-2 transition-all ${
-              activeTab === "appearance"
-                ? "border-b-2 border-yellow-500 text-yellow-700 bg-yellow-50"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
+            className={`px-4 py-3 font-medium text-sm flex items-center gap-2 transition-all ${activeTab === "appearance"
+              ? "border-b-2 border-yellow-500 text-yellow-700 bg-yellow-50"
+              : "text-gray-500 hover:text-gray-700"
+              }`}
             onClick={() => setActiveTab("appearance")}
           >
             <Palette className="h-4 w-4" />
             المظهر
           </button>
           <button
-            className={`px-4 py-3 font-medium text-sm flex items-center gap-2 transition-all ${
-              activeTab === "store"
-                ? "border-b-2 border-yellow-500 text-yellow-700 bg-yellow-50"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
+            className={`px-4 py-3 font-medium text-sm flex items-center gap-2 transition-all ${activeTab === "store"
+              ? "border-b-2 border-yellow-500 text-yellow-700 bg-yellow-50"
+              : "text-gray-500 hover:text-gray-700"
+              }`}
             onClick={() => setActiveTab("store")}
           >
             <Type className="h-4 w-4" />
@@ -116,11 +163,10 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
               {cardStyles.map((style) => (
                 <Card
                   key={style.id}
-                  className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${
-                    settings.cardStyle === style.id
-                      ? "ring-2 ring-yellow-500 bg-yellow-50 scale-105 shadow-lg"
-                      : "hover:scale-105"
-                  }`}
+                  className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${settings.cardStyle === style.id
+                    ? "ring-2 ring-yellow-500 bg-yellow-50 scale-105 shadow-lg"
+                    : "hover:scale-105"
+                    }`}
                   onClick={() => updateSettings({ cardStyle: style.id as any })}
                 >
                   <CardContent className="p-4 text-center">
@@ -133,29 +179,73 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
           )}
 
           {activeTab === "appearance" && (
-            <div className="space-y-8">
-              {/* Backgrounds */}
+            <div className="space-y-10">
+              {/* Background Colors */}
               <div>
-                <h3 className="text-lg font-semibold mb-4">خلفية الشاشة</h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {backgrounds.map((bg) => (
+                <h3 className="text-lg font-semibold mb-4">🎨 لون الخلفية</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {backgroundColors.map((bg) => (
                     <div
                       key={bg.id}
-                      className={`h-20 rounded-lg cursor-pointer border-2 transition-all duration-200 ${bg.class} ${
-                        settings.background === bg.id
-                          ? "border-yellow-500 ring-2 ring-yellow-200 scale-105 shadow-lg"
-                          : "border-gray-200 hover:scale-105 hover:shadow-md"
-                      }`}
-                      onClick={() => updateSettings({ background: bg.id as any })}
+                      className={`h-16 rounded-lg cursor-pointer border-2 transition-all duration-200 ${bg.class} ${settings.backgroundColor === bg.id
+                        ? "border-yellow-500 ring-2 ring-yellow-200 scale-105 shadow-lg"
+                        : "border-gray-200 hover:scale-105 hover:shadow-md"
+                        }`}
+                      onClick={() => updateSettings({ backgroundColor: bg.id as any })}
                     >
                       <div className="h-full flex items-center justify-center">
                         <span
-                          className={`text-sm font-medium px-2 py-1 rounded ${
-                            bg.id === "solid-dark" ? "bg-gray-800 text-white" : "bg-white/80"
-                          }`}
+                          className={`text-xs font-medium px-2 py-1 rounded ${bg.id === "solid-dark" ? "bg-gray-800 text-white" : "bg-white/80"
+                            }`}
                         >
                           {bg.name}
                         </span>
+                      </div>
+                    </div>
+                  ))}
+
+                  {/* Custom color option */}
+                  <div
+                    className={`h-16 rounded-lg cursor-pointer border-2 transition-all duration-200 relative overflow-hidden
+                      ${settings.backgroundColor === "solid-custom"
+                        ? "border-yellow-500 ring-2 ring-yellow-200 scale-105 shadow-lg"
+                        : "border-gray-200 hover:scale-105 hover:shadow-md"
+                      }`}
+                    style={{ backgroundColor: settings.customBackgroundColor }}
+                    onClick={() => {
+                      document.getElementById("custom-color-picker")?.click()
+                      updateSettings({ backgroundColor: "solid-custom" })
+                    }}
+                  >
+                    <input
+                      id="custom-color-picker"
+                      type="color"
+                      value={settings.customBackgroundColor}
+                      onChange={handleColorChange}
+                      className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
+                    />
+                    <div className="h-full flex items-center justify-center">
+                      <span className="text-xs font-medium px-2 py-1 rounded bg-white/80">لون مخصص</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Background Patterns */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4">🔳 نمط الخلفية</h3>
+                <div className="grid grid-cols-3 md:grid-cols-4 gap-4">
+                  {backgroundPatterns.map((pattern) => (
+                    <div
+                      key={pattern.id}
+                      className={`h-16 rounded-lg cursor-pointer border-2 transition-all duration-200 ${pattern.preview} ${settings.backgroundPattern === pattern.id
+                        ? "border-yellow-500 ring-2 ring-yellow-200 scale-105 shadow-lg"
+                        : "border-gray-200 hover:scale-105 hover:shadow-md"
+                        }`}
+                      onClick={() => updateSettings({ backgroundPattern: pattern.id as any })}
+                    >
+                      <div className="h-full flex items-center justify-center">
+                        <span className="text-xs font-medium px-2 py-1 rounded bg-white/80">{pattern.name}</span>
                       </div>
                     </div>
                   ))}
@@ -164,16 +254,15 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
 
               {/* Fonts */}
               <div>
-                <h3 className="text-lg font-semibold mb-4">نوع الخط</h3>
+                <h3 className="text-lg font-semibold mb-4">✍️ نوع الخط</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {fonts.map((font) => (
                     <Card
                       key={font.id}
-                      className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${
-                        settings.fontFamily === font.id
-                          ? "ring-2 ring-yellow-500 bg-yellow-50 scale-105 shadow-lg"
-                          : "hover:scale-105"
-                      }`}
+                      className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${settings.fontFamily === font.id
+                        ? "ring-2 ring-yellow-500 bg-yellow-50 scale-105 shadow-lg"
+                        : "hover:scale-105"
+                        }`}
                       onClick={() => updateSettings({ fontFamily: font.id as any })}
                     >
                       <CardContent className="p-4 text-center">
@@ -181,25 +270,6 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
                         <p className="text-sm text-gray-600">{font.name}</p>
                       </CardContent>
                     </Card>
-                  ))}
-                </div>
-              </div>
-
-              {/* Accent Colors */}
-              <div>
-                <h3 className="text-lg font-semibold mb-4">اللون المميز</h3>
-                <div className="flex gap-4 flex-wrap">
-                  {accentColors.map((color) => (
-                    <div
-                      key={color.id}
-                      className={`w-16 h-16 rounded-full cursor-pointer border-4 transition-all duration-200 ${color.class} ${
-                        settings.accentColor === color.id
-                          ? "border-gray-800 scale-110 ring-4 ring-gray-300 shadow-lg"
-                          : "border-gray-200 hover:scale-110 hover:shadow-md"
-                      }`}
-                      onClick={() => updateSettings({ accentColor: color.id as any })}
-                      title={color.name}
-                    />
                   ))}
                 </div>
               </div>
