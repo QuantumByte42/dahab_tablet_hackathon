@@ -1,10 +1,15 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Clock, Calendar } from "lucide-react"
+import { Clock, Calendar, Settings } from "lucide-react"
+import { useCustomizationStore } from "@/stores/customization-store"
+import { Button } from "@/components/ui/button"
+import { CustomizationPanel } from "./customization-panel"
 
 export function Header() {
   const [currentTime, setCurrentTime] = useState(new Date())
+  const [showCustomization, setShowCustomization] = useState(false)
+  const { settings } = useCustomizationStore()
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -15,7 +20,7 @@ export function Header() {
   }, [])
 
   const formatArabicDate = (date: Date) => {
-    return date.toLocaleDateString("en-JO", {
+    return date.toLocaleDateString("ar-JO", {
       weekday: "long",
       year: "numeric",
       month: "long",
@@ -24,7 +29,7 @@ export function Header() {
   }
 
   const formatArabicTime = (date: Date) => {
-    return date.toLocaleTimeString("en-JO", {
+    return date.toLocaleTimeString("ar-JO", {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
@@ -35,8 +40,18 @@ export function Header() {
     <header className="bg-white shadow-sm border-b border-gray-200 mb-8">
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">متجر الذهب</h1>
+          <div className="flex items-center gap-4">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">{settings.storeName}</h1>
+            </div>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setShowCustomization(true)}
+              className="hover:bg-yellow-50 transition-all duration-200"
+            >
+              <Settings className="h-5 w-5" />
+            </Button>
           </div>
 
           <div className="text-left">
@@ -51,6 +66,7 @@ export function Header() {
           </div>
         </div>
       </div>
+      <CustomizationPanel isOpen={showCustomization} onClose={() => setShowCustomization(false)} />
     </header>
   )
 }
