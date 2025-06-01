@@ -1,17 +1,39 @@
 export interface CustomizationSettings {
   cardStyle: "modern" | "classic" | "luxury" | "minimal" | "elegant" | "bold"
-  background: "gradient-gold" | "gradient-blue" | "gradient-green" | "solid-white" | "solid-dark" | "pattern-geometric"
+  backgroundColor:
+  | "gradient-gold"
+  | "gradient-blue"
+  | "gradient-green"
+  | "gradient-purple"
+  | "gradient-rose"
+  | "solid-white"
+  | "solid-dark"
+  | "solid-custom"
+  backgroundPattern:
+  | "none"
+  | "dots"
+  | "lines"
+  | "geometric"
+  | "waves"
+  | "diagonal"
+  | "grid"
+  | "hexagon"
+  | "triangles"
+  | "circles"
+  | "zigzag"
+  | "cross"
   fontFamily: "cairo" | "amiri" | "tajawal" | "almarai" | "rubik"
-  accentColor: "gold" | "blue" | "green" | "purple" | "red" | "teal"
+  customBackgroundColor: string
   storeName: string
   showLastUpdate: boolean
 }
 
 export const defaultSettings: CustomizationSettings = {
   cardStyle: "modern",
-  background: "gradient-gold",
+  backgroundColor: "gradient-gold",
+  backgroundPattern: "none",
   fontFamily: "cairo",
-  accentColor: "gold",
+  customBackgroundColor: "#ffffff",
   storeName: "متجر الذهب",
   showLastUpdate: true,
 }
