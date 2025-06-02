@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import "./globals.css"
 import { Cairo, Amiri, Tajawal, Almarai, Rubik } from "next/font/google"
+import { AuthProvider } from "@/components/auth/auth-provider"
 
 const cairo = Cairo({
   subsets: ["arabic"],
@@ -52,7 +53,9 @@ export default function RootLayout({
       dir="rtl"
       className={`${cairo.variable} ${amiri.variable} ${tajawal.variable} ${almarai.variable} ${rubik.variable}`}
     >
-      <body className={cairo.className}>{children}</body>
+      <body className={cairo.className}>
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   )
 }
