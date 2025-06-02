@@ -9,7 +9,7 @@ interface BoldCardProps {
   settings: CustomizationSettings
 }
 
-export function BoldCard({ item, settings }: BoldCardProps) {
+export function BoldCard({ item }: BoldCardProps) {
   return (
     <Card className="h-full hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-orange-500 via-red-500 to-pink-600 text-white border-0 transform hover:scale-105 relative overflow-hidden">
       {/* Bold background effects */}

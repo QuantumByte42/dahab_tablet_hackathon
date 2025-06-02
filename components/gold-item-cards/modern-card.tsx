@@ -9,7 +9,7 @@ interface ModernCardProps {
   settings: CustomizationSettings
 }
 
-export function ModernCard({ item, settings }: ModernCardProps) {
+export function ModernCard({ item }: ModernCardProps) {
   return (
     <Card className="h-full hover:shadow-xl transition-all duration-300 border-2 border-yellow-400 bg-yellow-50 hover:scale-105">
       <CardContent className="p-6">

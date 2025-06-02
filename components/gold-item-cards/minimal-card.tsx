@@ -7,7 +7,7 @@ interface MinimalCardProps {
   settings: CustomizationSettings
 }
 
-export function MinimalCard({ item, settings }: MinimalCardProps) {
+export function MinimalCard({ item }: MinimalCardProps) {
   return (
     <Card className="h-full hover:shadow-md transition-shadow duration-200 bg-white border border-gray-200">
       <CardContent className="p-8">

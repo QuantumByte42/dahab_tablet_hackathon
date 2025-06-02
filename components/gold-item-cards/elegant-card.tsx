@@ -9,7 +9,7 @@ interface ElegantCardProps {
   settings: CustomizationSettings
 }
 
-export function ElegantCard({ item, settings }: ElegantCardProps) {
+export function ElegantCard({ item }: ElegantCardProps) {
   return (
     <Card className="h-full hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-slate-50 to-gray-100 border-slate-200 relative overflow-hidden">
       {/* Elegant decorative elements */}

@@ -9,7 +9,7 @@ interface LuxuryCardProps {
   settings: CustomizationSettings
 }
 
-export function LuxuryCard({ item, settings }: LuxuryCardProps) {
+export function LuxuryCard({ item }: LuxuryCardProps) {
   return (
     <Card className="h-full hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white border-0 relative overflow-hidden">
       {/* Luxury background effects */}
