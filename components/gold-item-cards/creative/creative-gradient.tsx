@@ -11,10 +11,10 @@ interface CreativeGradientProps {
 
 export function CreativeGradient({ item, styling }: CreativeGradientProps) {
   // Override some styling properties to maintain the gradient style
-  const gradientStyle = {
+  const gradientStyle: CardStylingProps = {
     ...styling,
     borderSize: "0px",
-    borderStyle: "none",
+    borderStyle: "none" as const,
     mainFontColor: styling.mainFontColor || "#ffffff",
     subFontColor: styling.subFontColor || "#ffffff",
   }

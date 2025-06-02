@@ -7,7 +7,7 @@ import { Settings, Palette, Type, Layout, X, Wifi, RotateCcw } from "lucide-reac
 import { useCustomizationStore } from "@/stores/customization-store"
 import { useState } from "react"
 import { AdvancedColorPicker } from "@/components/ui/advanced-color-picker"
-import { getActiveConfigs, getConfigDisplayName } from "@/types/customization"
+import { getActiveConfigs, getConfigDisplayName, type CardStylingProps, type CustomizationSettings } from "@/types/customization"
 
 interface CustomizationPanelProps {
   isOpen: boolean
@@ -368,7 +368,7 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
                                           value={(settings.cardStyling?.[configKey] as string) || "normal"}
                                           onChange={(e) =>
                                             updateSettings({
-                                              cardStyling: { ...settings.cardStyling, [configKey]: e.target.value },
+                                              cardStyling: { ...settings.cardStyling, [configKey]: e.target.value as CardStylingProps["spacing"] },
                                             })
                                           }
                                           className="w-full p-2 border border-gray-300 rounded-lg bg-white"
@@ -391,7 +391,7 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
                                           value={(settings.cardStyling?.[configKey] as string) || "normal"}
                                           onChange={(e) =>
                                             updateSettings({
-                                              cardStyling: { ...settings.cardStyling, [configKey]: e.target.value },
+                                              cardStyling: { ...settings.cardStyling, [configKey]: e.target.value as CardStylingProps["fontSize"] },
                                             })
                                           }
                                           className="w-full p-2 border border-gray-300 rounded-lg bg-white"
@@ -414,7 +414,7 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
                                           value={(settings.cardStyling?.[configKey] as string) || "normal"}
                                           onChange={(e) =>
                                             updateSettings({
-                                              cardStyling: { ...settings.cardStyling, [configKey]: e.target.value },
+                                              cardStyling: { ...settings.cardStyling, [configKey]: e.target.value as CardStylingProps["fontWeight"] },
                                             })
                                           }
                                           className="w-full p-2 border border-gray-300 rounded-lg bg-white"
@@ -439,7 +439,7 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
                                           value={(settings.cardStyling?.[configKey] as string) || "grid"}
                                           onChange={(e) =>
                                             updateSettings({
-                                              cardStyling: { ...settings.cardStyling, [configKey]: e.target.value },
+                                              cardStyling: { ...settings.cardStyling, [configKey]: e.target.value as CardStylingProps["priceLayout"] },
                                             })
                                           }
                                           className="w-full p-2 border border-gray-300 rounded-lg bg-white"
@@ -542,7 +542,7 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
                                       value={settings.cardStyling?.borderStyle || "solid"}
                                       onChange={(e) =>
                                         updateSettings({
-                                          cardStyling: { ...settings.cardStyling, borderStyle: e.target.value as any },
+                                          cardStyling: { ...settings.cardStyling, borderStyle: e.target.value as CardStylingProps["borderStyle"] },
                                         })
                                       }
                                       className="w-full p-2 border border-gray-300 rounded-lg bg-white"
@@ -589,7 +589,7 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
                                           value={(settings.cardStyling?.[configKey] as string) || "medium"}
                                           onChange={(e) =>
                                             updateSettings({
-                                              cardStyling: { ...settings.cardStyling, [configKey]: e.target.value },
+                                              cardStyling: { ...settings.cardStyling, [configKey]: e.target.value as CardStylingProps["shadowStyle"] },
                                             })
                                           }
                                           className="w-full p-2 border border-gray-300 rounded-lg bg-white"
@@ -615,7 +615,7 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
                                           value={(settings.cardStyling?.[configKey] as string) || "scale"}
                                           onChange={(e) =>
                                             updateSettings({
-                                              cardStyling: { ...settings.cardStyling, [configKey]: e.target.value },
+                                              cardStyling: { ...settings.cardStyling, [configKey]: e.target.value as CardStylingProps["hoverEffect"] },
                                             })
                                           }
                                           className="w-full p-2 border border-gray-300 rounded-lg bg-white"
@@ -740,7 +740,7 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
                           ? "border-yellow-500 ring-2 ring-yellow-200 scale-105 shadow-lg"
                           : "border-gray-200 hover:scale-105 hover:shadow-md"
                       }`}
-                      onClick={() => updateSettings({ backgroundColor: bg.id as any })}
+                      onClick={() => updateSettings({ backgroundColor: bg.id as CustomizationSettings["backgroundColor"] })}
                     >
                       <div className="h-full flex items-center justify-center">
                         <span
@@ -794,7 +794,7 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
                           ? "border-yellow-500 ring-2 ring-yellow-200 scale-105 shadow-lg"
                           : "border-gray-200 hover:scale-105 hover:shadow-md"
                       }`}
-                      onClick={() => updateSettings({ backgroundPattern: pattern.id as any })}
+                      onClick={() => updateSettings({ backgroundPattern: pattern.id as CustomizationSettings["backgroundPattern"] })}
                     >
                       <div className="h-full flex items-center justify-center">
                         <span className="text-xs font-medium px-2 py-1 rounded bg-white/80">{pattern.name}</span>
@@ -816,7 +816,7 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
                           ? "ring-2 ring-yellow-500 bg-yellow-50 scale-105 shadow-lg"
                           : "hover:scale-105"
                       }`}
-                      onClick={() => updateSettings({ fontFamily: font.id as any })}
+                      onClick={() => updateSettings({ fontFamily: font.id as CustomizationSettings["fontFamily"] })}
                     >
                       <CardContent className="p-4 text-center">
                         <h4 className={`font-semibold text-xl mb-2 ${font.class}`}>{font.preview}</h4>

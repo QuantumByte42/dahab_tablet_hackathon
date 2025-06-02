@@ -11,12 +11,12 @@ interface CreativeArtisticProps {
 
 export function CreativeArtistic({ item, styling }: CreativeArtisticProps) {
   // Override some styling properties to maintain the artistic style
-  const artisticStyle = {
+  const artisticStyle: CardStylingProps = {
     ...styling,
     backgroundColor: styling.backgroundColor || "#fdf4ff",
     primaryColor: styling.primaryColor || "#a855f7",
     borderSize: "0px",
-    borderStyle: "none",
+    borderStyle: "none" as const,
     shadowStyle: styling.shadowStyle || "heavy",
   }
 

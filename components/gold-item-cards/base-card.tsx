@@ -11,6 +11,7 @@ interface BaseCardProps {
   className?: string
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function BaseCard({ item, styling, children, className = "" }: BaseCardProps) {
   // Helper functions to build styles
   const getShadowClass = () => {
@@ -64,8 +65,8 @@ export function BaseCard({ item, styling, children, className = "" }: BaseCardPr
     return fontWeightClasses[styling.fontWeight] || ""
   }
 
-  const getBackgroundStyle = () => {
-    const style: any = {}
+  const getBackgroundStyle = (): React.CSSProperties => {
+    const style: React.CSSProperties = {}
 
     if (styling.backgroundColor) {
       if (styling.gradient1Color && styling.gradient2Color && styling.gradientDirection) {
@@ -84,8 +85,8 @@ export function BaseCard({ item, styling, children, className = "" }: BaseCardPr
     return style
   }
 
-  const getBorderStyle = () => {
-    const style: any = {}
+  const getBorderStyle = (): React.CSSProperties => {
+    const style: React.CSSProperties = {}
 
     if (styling.borderColor) style.borderColor = styling.borderColor
     if (styling.borderSize) style.borderWidth = styling.borderSize
