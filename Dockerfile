@@ -49,6 +49,9 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
+# Copy .env file if it exists (for environment variable fallback)
+COPY --from=builder /app/.env* ./
+
 # Change ownership to nextjs user
 RUN chown -R nextjs:nodejs /app
 USER nextjs
