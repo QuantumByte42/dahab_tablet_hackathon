@@ -3,9 +3,10 @@ import { Card, CardContent } from "@/components/ui/card"
 import type React from "react"
 
 import { Button } from "@/components/ui/button"
-import { Settings, Palette, Type, Layout, X, Wifi, RotateCcw } from "lucide-react"
+import { Settings, Palette, Type, Layout, X, Wifi, RotateCcw, DollarSign, RefreshCw } from "lucide-react"
 import { useCustomizationStore } from "@/stores/customization-store"
 import { useState } from "react"
+import { useGoldData } from "@/hooks/use-gold-data"
 import { AdvancedColorPicker } from "@/components/ui/advanced-color-picker"
 import { getActiveConfigs, getConfigDisplayName } from "@/types/customization"
 
@@ -15,9 +16,11 @@ interface CustomizationPanelProps {
 }
 
 export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps) {
-  const { settings, updateSettings, resetSettings, setCardStyle } = useCustomizationStore()
+  const { settings, pricePreferences, updateSettings, updatePricePreference, resetSettings, setCardStyle } =
+    useCustomizationStore()
   const [activeTab, setActiveTab] = useState("style")
   const [showDetailedStyling, setShowDetailedStyling] = useState(false)
+  const { originalGoldItems, loading } = useGoldData()
 
   if (!isOpen) return null
 
@@ -153,6 +156,15 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
     return colors[color as keyof typeof colors] || colors.blue
   }
 
+  const handlePriceChange = (itemName: string, field: "buy_delta" | "sell_delta", value: string) => {
+    const numValue = Number.parseFloat(value) || 0
+    updatePricePreference(itemName, field, numValue)
+  }
+
+  const getAdjustedPrice = (originalPrice: number, delta: number) => {
+    return originalPrice + delta
+  }
+
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden">
@@ -191,6 +203,16 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
           >
             <Palette className="h-4 w-4" />
             المظهر
+          </button>
+          <button
+            className={`px-4 py-3 font-medium text-sm flex items-center gap-2 transition-all ${activeTab === "prices"
+              ? "border-b-2 border-yellow-500 text-yellow-700 bg-yellow-50"
+              : "text-gray-500 hover:text-gray-700"
+              }`}
+            onClick={() => setActiveTab("prices")}
+          >
+            <DollarSign className="h-4 w-4" />
+            الأسعار
           </button>
           <button
             className={`px-4 py-3 font-medium text-sm flex items-center gap-2 transition-all ${activeTab === "store"
@@ -794,7 +816,7 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
 
               {/* Fonts */}
               <div>
-                <h3 className="text-lg font-semibold mb-4">✍️ نوع الخط</h3>
+                <h3 className="text-lg font-semibold mb-4">نوع الخط</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {fonts.map((font) => (
                     <Card
@@ -813,6 +835,108 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
                   ))}
                 </div>
               </div>
+            </div>
+          )}
+
+          {activeTab === "prices" && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold">تعديل الأسعار</h3>
+              </div>
+
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+                <p className="text-sm text-yellow-800">
+                  يمكنك تعديل أسعار البيع والشراء لكل منتج من خلال إضافة أو طرح قيمة من السعر الأصلي. القيم الموجبة تزيد
+                  السعر والقيم السالبة تخفضه.
+                </p>
+              </div>
+
+              {loading ? (
+                <div className="flex items-center justify-center p-8">
+                  <RefreshCw className="h-8 w-8 animate-spin text-yellow-600" />
+                  <span className="mr-2">جاري تحميل البيانات...</span>
+                </div>
+              ) : (
+                <div className="border rounded-lg overflow-hidden">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead className="bg-gray-100">
+                        <tr>
+                          <th className="px-4 py-3 text-right font-medium text-gray-700">المنتج</th>
+                          <th className="px-4 py-3 text-center font-medium text-gray-700">العيار</th>
+                          <th className="px-4 py-3 text-center font-medium text-gray-700">سعر الشراء الأصلي</th>
+                          <th className="px-4 py-3 text-center font-medium text-gray-700">تعديل الشراء</th>
+                          <th className="px-4 py-3 text-center font-medium text-gray-700">سعر الشراء النهائي</th>
+                          <th className="px-4 py-3 text-center font-medium text-gray-700">سعر البيع الأصلي</th>
+                          <th className="px-4 py-3 text-center font-medium text-gray-700">تعديل البيع</th>
+                          <th className="px-4 py-3 text-center font-medium text-gray-700">سعر البيع النهائي</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y">
+                        {originalGoldItems.map((item) => {
+                          const preference = pricePreferences[item.name] || { buy_delta: 0, sell_delta: 0 }
+                          const buyDelta = preference.buy_delta || 0
+                          const sellDelta = preference.sell_delta || 0
+
+                          return (
+                            <tr key={item.code} className="hover:bg-gray-50">
+                              <td className="px-4 py-3">
+                                <div>
+                                  <div className="font-medium">{item.nameAr}</div>
+                                  <div className="text-xs text-gray-500">{item.name}</div>
+                                </div>
+                              </td>
+                              <td className="px-4 py-3 text-center">{item.grade}</td>
+                              <td className="px-4 py-3 text-center font-mono">{item.purchasePrice.toFixed(2)}</td>
+                              <td className="px-4 py-3">
+                                <input
+                                  type="number"
+                                  step="0.1"
+                                  value={buyDelta}
+                                  onChange={(e) => handlePriceChange(item.name, "buy_delta", e.target.value)}
+                                  className={`w-24 px-2 py-1 border rounded text-center ${buyDelta > 0
+                                    ? "border-green-300 bg-green-50"
+                                    : buyDelta < 0
+                                      ? "border-red-300 bg-red-50"
+                                      : "border-gray-300"
+                                    }`}
+                                />
+                              </td>
+                              <td
+                                className={`px-4 py-3 text-center font-mono font-bold ${buyDelta > 0 ? "text-green-600" : buyDelta < 0 ? "text-red-600" : ""
+                                  }`}
+                              >
+                                {getAdjustedPrice(item.purchasePrice, buyDelta).toFixed(2)}
+                              </td>
+                              <td className="px-4 py-3 text-center font-arial">{item.sellPrice.toFixed(2)}</td>
+                              <td className="px-4 py-3">
+                                <input
+                                  type="number"
+                                  step="0.1"
+                                  value={sellDelta}
+                                  onChange={(e) => handlePriceChange(item.name, "sell_delta", e.target.value)}
+                                  className={`w-24 px-2 py-1 border rounded text-center ${sellDelta > 0
+                                    ? "border-green-300 bg-green-50"
+                                    : sellDelta < 0
+                                      ? "border-red-300 bg-red-50"
+                                      : "border-gray-300"
+                                    }`}
+                                />
+                              </td>
+                              <td
+                                className={`px-4 py-3 text-center font-mono font-bold ${sellDelta > 0 ? "text-green-600" : sellDelta < 0 ? "text-red-600" : ""
+                                  }`}
+                              >
+                                {getAdjustedPrice(item.sellPrice, sellDelta).toFixed(2)}
+                              </td>
+                            </tr>
+                          )
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
