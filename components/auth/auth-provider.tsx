@@ -2,8 +2,9 @@
 
 import type React from "react"
 
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { useAuthStore } from "@/stores/auth-store"
+import { useCustomizationStore } from "@/stores/customization-store"
 import { AuthService } from "@/lib/pocketbase"
 
 interface AuthProviderProps {
@@ -12,18 +13,25 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const { checkAuth } = useAuthStore()
+  const { loadSettings } = useCustomizationStore()
+  const hasLoadedRef = useRef(false)
 
   useEffect(() => {
-    // Check authentication status on app load
     checkAuth()
 
-    // Listen for auth changes
-    const unsubscribe = AuthService.onAuthChange((user) => {
+    const unsubscribe = AuthService.onAuthChange(async (user) => {
       useAuthStore.setState({ user })
+
+      if (user && !hasLoadedRef.current) {
+        hasLoadedRef.current = true
+        await loadSettings()
+      } else if (!user) {
+        hasLoadedRef.current = false
+      }
     })
 
     return unsubscribe
-  }, [checkAuth])
+  }, [checkAuth, loadSettings])
 
   return <>{children}</>
 }
