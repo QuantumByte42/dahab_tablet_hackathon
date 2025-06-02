@@ -20,14 +20,6 @@ import { BusinessCorporate } from "./gold-item-cards/business/business-corporate
 import { BusinessDashboard } from "./gold-item-cards/business/business-dashboard"
 import { BusinessTable } from "./gold-item-cards/business/business-table"
 
-// Legacy cards (keeping for backward compatibility)
-import { ModernCard } from "./gold-item-cards/modern-card"
-import { ClassicCard } from "./gold-item-cards/classic-card"
-import { LuxuryCard } from "./gold-item-cards/luxury-card"
-import { MinimalCard } from "./gold-item-cards/minimal-card"
-import { ElegantCard } from "./gold-item-cards/elegant-card"
-import { BoldCard } from "./gold-item-cards/bold-card"
-
 import type { GoldItem } from "@/types/gold"
 
 interface GoldItemCardProps {
@@ -57,14 +49,6 @@ export function GoldItemCard({ item }: GoldItemCardProps) {
     "business-corporate": BusinessCorporate,
     "business-dashboard": BusinessDashboard,
     "business-table": BusinessTable,
-
-    // Legacy cards (for backward compatibility)
-    modern: ModernCard,
-    classic: ClassicCard,
-    luxury: LuxuryCard,
-    minimal: MinimalCard,
-    elegant: ElegantCard,
-    bold: BoldCard,
   }
 
   const CardComponent = cardComponents[settings.cardStyle as keyof typeof cardComponents] || ModernClean
