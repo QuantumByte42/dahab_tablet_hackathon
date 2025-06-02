@@ -17,7 +17,7 @@ export function GoldDashboard() {
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
           <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-yellow-600" />
-          <p className="text-gray-600">جاري تحميل أسعار الذهب من Firebase...</p>
+          <p className="text-gray-600">جاري تحميل أسعار الذهب...</p>
           <p className="text-sm text-gray-500 mt-2">الاتصال بقاعدة البيانات...</p>
         </div>
       </div>

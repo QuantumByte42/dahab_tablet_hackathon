@@ -27,7 +27,7 @@ export function useGoldData() {
         setLoading(true)
         setError(null)
 
-        console.log("🔄 Fetching data from Firebase goldMerchant collection...")
+        console.log("Fetching data from Firebase goldMerchant collection...")
 
         const snapshot = await getDocs(collection(db, "goldMerchant"))
         const items: GoldItem[] = []
@@ -36,7 +36,7 @@ export function useGoldData() {
           if (doc.id === "date") return
 
           const data = doc.data()
-          console.log(`📄 Processing document: ${doc.id}`, data)
+          console.log(`Processing document: ${doc.id}`, data)
 
           for (const key in data) {
             if (typeof data[key] === "object" && data[key] !== null) {
@@ -59,7 +59,7 @@ export function useGoldData() {
                   sellPrice: item.sellPrice,
                 } as GoldItem)
 
-                console.log(`✅ Added item: ${item.nameAr} (${item.code})`)
+                console.log(`Added item: ${item.nameAr} (${item.code})`)
               }
             }
           }
@@ -92,7 +92,6 @@ export function useGoldData() {
     // Initial fetch
     fetchGoldData()
 
-    // Set up interval for auto-refresh (only if component is still mounted)
     intervalId = setInterval(() => {
       if (isMounted) {
         console.log("Auto-refreshing...")
@@ -100,7 +99,6 @@ export function useGoldData() {
       }
     }, 30000)
 
-    // Cleanup function
     return () => {
       isMounted = false
       if (intervalId) {
@@ -108,7 +106,7 @@ export function useGoldData() {
         intervalId = null
       }
     }
-  }, []) // Only run on mount
+  }, [])
 
   useEffect(() => {
     if (originalGoldItems.length > 0) {
