@@ -128,8 +128,8 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
     { id: "rubik", name: "Rubik", class: "font-rubik", preview: "نموذج خط روبيك" },
   ]
 
-  const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateSettings({
+  const handleColorChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    await updateSettings({
       backgroundColor: "solid-custom",
       customBackgroundColor: e.target.value,
     })
@@ -162,7 +162,7 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
             <h2 className="text-xl font-bold">إعدادات المتجر</h2>
             <div className="flex items-center gap-1 text-green-600">
               <Wifi className="h-4 w-4" />
-              <span className="text-sm">Firebase</span>
+              <span className="text-sm">متصل</span>
             </div>
           </div>
           <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full">
@@ -170,41 +170,33 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
           </Button>
         </div>
 
-        {/* Firebase status notice */}
-        <div className="bg-green-50 border-b border-green-200 p-3">
-          <p className="text-sm text-green-700 text-center">🔥 متصل بقاعدة بيانات Firebase - البيانات محدثة مباشرة</p>
-        </div>
-
         {/* Tabs */}
         <div className="flex border-b">
           <button
-            className={`px-4 py-3 font-medium text-sm flex items-center gap-2 transition-all ${
-              activeTab === "style"
-                ? "border-b-2 border-yellow-500 text-yellow-700 bg-yellow-50"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
+            className={`px-4 py-3 font-medium text-sm flex items-center gap-2 transition-all ${activeTab === "style"
+              ? "border-b-2 border-yellow-500 text-yellow-700 bg-yellow-50"
+              : "text-gray-500 hover:text-gray-700"
+              }`}
             onClick={() => setActiveTab("style")}
           >
             <Layout className="h-4 w-4" />
             نمط البطاقات
           </button>
           <button
-            className={`px-4 py-3 font-medium text-sm flex items-center gap-2 transition-all ${
-              activeTab === "appearance"
-                ? "border-b-2 border-yellow-500 text-yellow-700 bg-yellow-50"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
+            className={`px-4 py-3 font-medium text-sm flex items-center gap-2 transition-all ${activeTab === "appearance"
+              ? "border-b-2 border-yellow-500 text-yellow-700 bg-yellow-50"
+              : "text-gray-500 hover:text-gray-700"
+              }`}
             onClick={() => setActiveTab("appearance")}
           >
             <Palette className="h-4 w-4" />
             المظهر
           </button>
           <button
-            className={`px-4 py-3 font-medium text-sm flex items-center gap-2 transition-all ${
-              activeTab === "store"
-                ? "border-b-2 border-yellow-500 text-yellow-700 bg-yellow-50"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
+            className={`px-4 py-3 font-medium text-sm flex items-center gap-2 transition-all ${activeTab === "store"
+              ? "border-b-2 border-yellow-500 text-yellow-700 bg-yellow-50"
+              : "text-gray-500 hover:text-gray-700"
+              }`}
             onClick={() => setActiveTab("store")}
           >
             <Type className="h-4 w-4" />
@@ -735,18 +727,16 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
                   {backgroundColors.map((bg) => (
                     <div
                       key={bg.id}
-                      className={`h-16 rounded-lg cursor-pointer border-2 transition-all duration-200 ${bg.class} ${
-                        settings.backgroundColor === bg.id
-                          ? "border-yellow-500 ring-2 ring-yellow-200 scale-105 shadow-lg"
-                          : "border-gray-200 hover:scale-105 hover:shadow-md"
-                      }`}
+                      className={`h-16 rounded-lg cursor-pointer border-2 transition-all duration-200 ${bg.class} ${settings.backgroundColor === bg.id
+                        ? "border-yellow-500 ring-2 ring-yellow-200 scale-105 shadow-lg"
+                        : "border-gray-200 hover:scale-105 hover:shadow-md"
+                        }`}
                       onClick={() => updateSettings({ backgroundColor: bg.id as any })}
                     >
                       <div className="h-full flex items-center justify-center">
                         <span
-                          className={`text-xs font-medium px-2 py-1 rounded ${
-                            bg.id === "solid-dark" ? "bg-gray-800 text-white" : "bg-white/80"
-                          }`}
+                          className={`text-xs font-medium px-2 py-1 rounded ${bg.id === "solid-dark" ? "bg-gray-800 text-white" : "bg-white/80"
+                            }`}
                         >
                           {bg.name}
                         </span>
@@ -757,10 +747,9 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
                   {/* Custom color option */}
                   <div
                     className={`h-16 rounded-lg cursor-pointer border-2 transition-all duration-200 relative overflow-hidden
-                      ${
-                        settings.backgroundColor === "solid-custom"
-                          ? "border-yellow-500 ring-2 ring-yellow-200 scale-105 shadow-lg"
-                          : "border-gray-200 hover:scale-105 hover:shadow-md"
+                      ${settings.backgroundColor === "solid-custom"
+                        ? "border-yellow-500 ring-2 ring-yellow-200 scale-105 shadow-lg"
+                        : "border-gray-200 hover:scale-105 hover:shadow-md"
                       }`}
                     style={{ backgroundColor: settings.customBackgroundColor }}
                     onClick={() => {
@@ -789,11 +778,10 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
                   {backgroundPatterns.map((pattern) => (
                     <div
                       key={pattern.id}
-                      className={`h-16 rounded-lg cursor-pointer border-2 transition-all duration-200 ${pattern.preview} ${
-                        settings.backgroundPattern === pattern.id
-                          ? "border-yellow-500 ring-2 ring-yellow-200 scale-105 shadow-lg"
-                          : "border-gray-200 hover:scale-105 hover:shadow-md"
-                      }`}
+                      className={`h-16 rounded-lg cursor-pointer border-2 transition-all duration-200 ${pattern.preview} ${settings.backgroundPattern === pattern.id
+                        ? "border-yellow-500 ring-2 ring-yellow-200 scale-105 shadow-lg"
+                        : "border-gray-200 hover:scale-105 hover:shadow-md"
+                        }`}
                       onClick={() => updateSettings({ backgroundPattern: pattern.id as any })}
                     >
                       <div className="h-full flex items-center justify-center">
@@ -811,11 +799,10 @@ export function CustomizationPanel({ isOpen, onClose }: CustomizationPanelProps)
                   {fonts.map((font) => (
                     <Card
                       key={font.id}
-                      className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${
-                        settings.fontFamily === font.id
-                          ? "ring-2 ring-yellow-500 bg-yellow-50 scale-105 shadow-lg"
-                          : "hover:scale-105"
-                      }`}
+                      className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${settings.fontFamily === font.id
+                        ? "ring-2 ring-yellow-500 bg-yellow-50 scale-105 shadow-lg"
+                        : "hover:scale-105"
+                        }`}
                       onClick={() => updateSettings({ fontFamily: font.id as any })}
                     >
                       <CardContent className="p-4 text-center">

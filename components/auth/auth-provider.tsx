@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
 import { useAuthStore } from "@/stores/auth-store"
 import { useCustomizationStore } from "@/stores/customization-store"
 import { AuthService } from "@/lib/pocketbase"
@@ -13,8 +13,7 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const { checkAuth } = useAuthStore()
-  const { loadSettings } = useCustomizationStore()
-  const hasLoadedRef = useRef(false)
+  const { loadSettings, hasLoadedOnce } = useCustomizationStore()
 
   useEffect(() => {
     checkAuth()
@@ -22,16 +21,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const unsubscribe = AuthService.onAuthChange(async (user) => {
       useAuthStore.setState({ user })
 
-      if (user && !hasLoadedRef.current) {
-        hasLoadedRef.current = true
+      if (user) {
         await loadSettings()
-      } else if (!user) {
-        hasLoadedRef.current = false
+      } else {
+        useCustomizationStore.setState({ hasLoadedOnce: false })
       }
     })
 
     return unsubscribe
-  }, [checkAuth, loadSettings])
+  }, [checkAuth, loadSettings, hasLoadedOnce])
 
   return <>{children}</>
 }

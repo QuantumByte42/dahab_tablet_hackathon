@@ -6,10 +6,11 @@ import { pb } from "@/lib/pocketbase"
 interface CustomizationStore {
   settings: CustomizationSettings
   isLoadingSettings: boolean
-  updateSettings: (newSettings: Partial<CustomizationSettings>) => void
-  resetSettings: () => void
-  resetCardStyling: (cardStyle: string) => void
-  setCardStyle: (cardStyle: string) => void
+  hasLoadedOnce: boolean
+  updateSettings: (newSettings: Partial<CustomizationSettings>) => Promise<void>
+  resetSettings: () => Promise<void>
+  resetCardStyling: (cardStyle: string) => Promise<void>
+  setCardStyle: (cardStyle: string) => Promise<void>
   loadSettings: () => Promise<void>
   saveSettings: (settings: CustomizationSettings) => Promise<void>
 }
@@ -17,10 +18,13 @@ interface CustomizationStore {
 export const useCustomizationStore = create<CustomizationStore>()((set, get) => ({
   settings: defaultSettings,
   isLoadingSettings: false,
+  hasLoadedOnce: false,
 
-  updateSettings: (newSettings) => {
+  updateSettings: async (newSettings) => {
     const updatedSettings = { ...get().settings, ...newSettings }
     set({ settings: updatedSettings })
+
+    await get().saveSettings(updatedSettings)
   },
 
   resetSettings: async () => {
@@ -59,22 +63,36 @@ export const useCustomizationStore = create<CustomizationStore>()((set, get) => 
       set({ isLoadingSettings: true })
 
       if (!pb.authStore.isValid || !pb.authStore.model) {
+        set({ hasLoadedOnce: true })
         return
       }
 
       const userId = pb.authStore.model.id
+      console.log("Loading settings for user:", userId)
+
+
+
+
       const user = await pb.collection("admins").getOne(userId)
 
       if (user.portable_dahab_system_style_preferences) {
         console.log("Loading settings from PocketBase:", user.portable_dahab_system_style_preferences)
-        set({ settings: user.portable_dahab_system_style_preferences })
+        set({
+          settings: user.portable_dahab_system_style_preferences,
+          hasLoadedOnce: true,
+        })
       } else {
-        console.log("No saved settings")
-        set({ settings: defaultSettings })
+        set({
+          settings: defaultSettings,
+          hasLoadedOnce: true,
+        })
       }
     } catch (error) {
       console.error("Error loading settings:", error)
-      set({ settings: defaultSettings })
+      set({
+        settings: defaultSettings,
+        hasLoadedOnce: true,
+      })
     } finally {
       set({ isLoadingSettings: false })
     }
@@ -83,14 +101,16 @@ export const useCustomizationStore = create<CustomizationStore>()((set, get) => 
   saveSettings: async (settings) => {
     try {
       if (!pb.authStore.isValid || !pb.authStore.model) {
-        console.log("No authenticated user")
         return
       }
 
       const userId = pb.authStore.model.id
+      console.log("Saving settings to PocketBase for user:", userId, settings)
+
       await pb.collection("admins").update(userId, {
         portable_dahab_system_style_preferences: settings,
       })
+      console.log("Settings saved")
     } catch (error) {
       console.error("Error saving settings:", error)
     }
