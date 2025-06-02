@@ -21,23 +21,23 @@ export function BusinessTable({ item, styling }: BusinessTableProps) {
     <BaseCard item={item} styling={tableStyle}>
       <div className="flex flex-col h-full">
         {/* Table header */}
-        <div 
+        <div
           className="p-3 border-b rounded-t"
-          style={{ 
+          style={{
             backgroundColor: styling.subBackgroundColor || "#f9fafb",
             borderColor: styling.borderColor || "#e5e7eb"
           }}
         >
           <div className="flex justify-between items-center">
-            <h3 
+            <h3
               className="font-medium"
               style={{ color: styling.mainFontColor || "#374151" }}
             >
               {item.nameAr}
             </h3>
-            <span 
+            <span
               className="text-xs px-2 py-0.5 rounded"
-              style={{ 
+              style={{
                 backgroundColor: styling.subBackgroundColor || "#f3f4f6",
                 color: styling.subFontColor || "#6b7280"
               }}
@@ -48,16 +48,16 @@ export function BusinessTable({ item, styling }: BusinessTableProps) {
         </div>
 
         {/* Table body */}
-        <div 
+        <div
           className="divide-y"
           style={{ borderColor: `${styling.borderColor || "#e5e7eb"}50` }}
         >
-          <div 
+          <div
             className="grid grid-cols-2 divide-x text-sm"
             style={{ borderColor: `${styling.borderColor || "#e5e7eb"}50` }}
           >
             <div className="p-3 text-center">
-              <div 
+              <div
                 className="text-xs mb-1"
                 style={{ color: styling.subFontColor || "#6b7280" }}
               >
@@ -68,13 +68,13 @@ export function BusinessTable({ item, styling }: BusinessTableProps) {
               </div>
             </div>
             <div className="p-3 text-center">
-              <div 
+              <div
                 className="text-xs mb-1"
                 style={{ color: styling.subFontColor || "#6b7280" }}
               >
                 العيار
               </div>
-              <div 
+              <div
                 className="font-medium"
                 style={{ color: styling.mainFontColor || "#374151" }}
               >
@@ -83,22 +83,42 @@ export function BusinessTable({ item, styling }: BusinessTableProps) {
             </div>
           </div>
 
-          <div 
+          <div
             className="grid grid-cols-2 divide-x"
             style={{ borderColor: `${styling.borderColor || "#e5e7eb"}50` }}
           >
             <div className="p-3">
-              <div 
+              <div
                 className="text-xs mb-1"
                 style={{ color: styling.subFontColor || "#6b7280" }}
               >
                 سعر الشراء
               </div>
-              <div 
+              <div
                 className="font-semibold"
                 style={{ color: styling.buyFontColor || "#15803d" }}
               >
                 {item.purchasePrice.toFixed(2)} د.أ
               </div>
             </div>
-            <div className="\
+            <div className="p-3">
+              <div
+                className="text-xs mb-1"
+                style={{ color: styling.subFontColor || "#6b7280" }}
+              >
+                سعر البيع
+              </div>
+              <div
+                className="font-semibold"
+                style={{ color: styling.sellFontColor || "#dc2626" }}
+              >
+                {item.sellPrice.toFixed(2)} د.أ
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </BaseCard>
+  )
+}
+
