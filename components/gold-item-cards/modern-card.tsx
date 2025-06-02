@@ -10,33 +10,13 @@ interface ModernCardProps {
 }
 
 export function ModernCard({ item, settings }: ModernCardProps) {
-  const accentColors = {
-    gold: "border-yellow-400 bg-yellow-50",
-    blue: "border-blue-400 bg-blue-50",
-    green: "border-green-400 bg-green-50",
-    purple: "border-purple-400 bg-purple-50",
-    red: "border-red-400 bg-red-50",
-    teal: "border-teal-400 bg-teal-50",
-  }
-
-  const iconColors = {
-    gold: "bg-yellow-100 text-yellow-600",
-    blue: "bg-blue-100 text-blue-600",
-    green: "bg-green-100 text-green-600",
-    purple: "bg-purple-100 text-purple-600",
-    red: "bg-red-100 text-red-600",
-    teal: "bg-teal-100 text-teal-600",
-  }
-
   return (
-    <Card
-      className={`h-full hover:shadow-xl transition-all duration-300 border-2 ${accentColors[settings.accentColor]} hover:scale-105`}
-    >
+    <Card className="h-full hover:shadow-xl transition-all duration-300 border-2 border-yellow-400 bg-yellow-50 hover:scale-105">
       <CardContent className="p-6">
         {/* Header with icon and title */}
         <div className="flex items-start justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className={`p-3 rounded-full ${iconColors[settings.accentColor]}`}>
+            <div className="p-3 rounded-full bg-yellow-100 text-yellow-600">
               <Coins className="h-6 w-6" />
             </div>
             <div>
