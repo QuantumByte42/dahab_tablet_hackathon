@@ -2,6 +2,7 @@
 
 import { GoldDashboard } from "@/components/gold-dashboard"
 import { Header } from "@/components/header"
+import { ProtectedRoute } from "@/components/auth/protected-route"
 import { useCustomizationStore } from "@/stores/customization-store"
 
 export default function Home() {
@@ -57,23 +58,25 @@ export default function Home() {
   }
 
   return (
-    <div className={`min-h-screen transition-all duration-300 ${fontClasses[settings.fontFamily]}`}>
-      {/* Background color layer */}
-      <div
-        className={`fixed inset-0 z-0 ${backgroundColorClasses[settings.backgroundColor]}`}
-        style={getBackgroundStyle()}
-      ></div>
+    <ProtectedRoute>
+      <div className={`min-h-screen transition-all duration-300 ${fontClasses[settings.fontFamily]}`}>
+        {/* Background color layer */}
+        <div
+          className={`fixed inset-0 z-0 ${backgroundColorClasses[settings.backgroundColor]}`}
+          style={getBackgroundStyle()}
+        ></div>
 
-      {/* Pattern overlay layer */}
-      <div className={`fixed inset-0 z-0 ${backgroundPatternClasses[settings.backgroundPattern]}`}></div>
+        {/* Pattern overlay layer */}
+        <div className={`fixed inset-0 z-0 ${backgroundPatternClasses[settings.backgroundPattern]}`}></div>
 
-      {/* Content */}
-      <div className="relative z-10">
-        <Header />
-        <div className="container mx-auto px-4 py-8">
-          <GoldDashboard />
+        {/* Content */}
+        <div className="relative z-10">
+          <Header />
+          <div className="container mx-auto px-4 py-8">
+            <GoldDashboard />
+          </div>
         </div>
       </div>
-    </div>
+    </ProtectedRoute>
   )
 }
