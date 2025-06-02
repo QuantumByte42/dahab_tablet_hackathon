@@ -31,5 +31,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return unsubscribe
   }, [checkAuth, loadSettings, hasLoadedOnce])
 
+  if (!hasLoadedOnce) {
+    loadSettings()
+  }
+
   return <>{children}</>
 }
